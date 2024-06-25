@@ -9,8 +9,6 @@ from superlinked.framework.common.schema.schema import schema
 from superlinked.framework.common.schema.schema_object import (
     String,
     Integer,
-    StringList,
-    Float,
 )
 from superlinked.framework.common.schema.id_schema_object import IdField
 from superlinked.framework.common.parser.dataframe_parser import DataFrameParser
@@ -29,24 +27,20 @@ from superlinked.framework.dsl.space.categorical_similarity_space import (
 from util.common import camel_to_snake, separate_numeric_and_string_columns
 
 
-class Space:
-    pass
-
-
 def create_superlinked_embeddings(dataset: pd.DataFrame, config: DictConfig):
     class Employee_skeleteon:
         id: IdField
 
     numeric_columns, string_columns = separate_numeric_and_string_columns(dataset.drop(config.data.target_colname, axis=1))
     for col in numeric_columns:
-        Employee_skeleteon.__annotations__[camel_to_snake(col)] = Float
+        Employee_skeleteon.__annotations__[camel_to_snake(col)] = Integer
     for col in string_columns:
         Employee_skeleteon.__annotations__[camel_to_snake(col)] = String
 
     Employee = schema(Employee_skeleteon)
     employee = Employee()
 
-    spaces_all: list[Space] = [
+    spaces_all = [
         CategoricalSimilaritySpace(
             employee.over_time,
             categories=["Yes", "No"],
@@ -111,7 +105,7 @@ def create_superlinked_embeddings(dataset: pd.DataFrame, config: DictConfig):
         if "JobSatisfaction" in dataset.columns
         else None,
     ]
-    spaces: list[Space] = [f for f in spaces_all if f is not None]
+    spaces = [f for f in spaces_all if f is not None]
 
     skip_columns: list[str] = ["naive_input", config.data.target_colname]
 

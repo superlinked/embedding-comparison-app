@@ -119,7 +119,7 @@ def main(config: DictConfig) -> None:
                 if st.button("Create scatter plots!"):
                     column_1, column_2 = st.columns(2)
                     with column_1:
-                        st.header("Naive embeddings")
+                        st.header("LLM embeddings")
                         naive_chart = create_pca_component_scatter(
                             st.session_state["df_to_use"], st.session_state["naive_pca"], st.session_state["coloring_attribute"], config
                         )
