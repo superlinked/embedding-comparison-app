@@ -85,9 +85,10 @@ def main(config: DictConfig) -> None:
             embedding_column_1, embedding_column_2 = st.columns(2)
             with embedding_column_1:
                 st.markdown("## Create LLM embeddings")
-                st.session_state["naive_embeddings"] = create_naive_embeddings(
-                    st.session_state["df_to_use"], config=config
-                )
+                if st.session_state["naive_embeddings"] is None:
+                    st.session_state["naive_embeddings"] = create_naive_embeddings(
+                        st.session_state["df_to_use"], config=config
+                    )
                 if st.session_state["naive_embeddings"] is not None:
                     st.write(
                         f'LLM embeddings are created with shape: `{st.session_state["naive_embeddings"].shape}`'
@@ -95,22 +96,25 @@ def main(config: DictConfig) -> None:
 
             with embedding_column_2:
                 st.markdown("## Create Superlinked embeddings")
-                st.session_state["superlinked_embeddings"] = create_superlinked_embeddings(
-                    st.session_state["df_to_use"], config=config
-                )
+                if st.session_state["superlinked_embeddings"] is None:
+                    st.session_state["superlinked_embeddings"] = create_superlinked_embeddings(
+                        st.session_state["df_to_use"], config=config
+                    )
                 if st.session_state["superlinked_embeddings"] is not None:
                     st.write(
                         f'Superlinked embeddings are created with shape: `{st.session_state["superlinked_embeddings"].shape}`'
                     )
 
             st.markdown("# Visualisation")
-            st.session_state["naive_pca"]: np.ndarray = pca_transform(
-                st.session_state["naive_embeddings"]
-            )[:, :2]
+            if st.session_state["naive_pca"] is None:
+                st.session_state["naive_pca"]: np.ndarray = pca_transform(
+                    st.session_state["naive_embeddings"]
+                )[:, :2]
             st.write("LLM embedding PCA transformation ready.")
-            st.session_state["superlinked_pca"]: np.ndarray = pca_transform(
-                st.session_state["superlinked_embeddings"]
-            )[:, :2]
+            if st.session_state["superlinked_pca"] is None:
+                st.session_state["superlinked_pca"]: np.ndarray = pca_transform(
+                    st.session_state["superlinked_embeddings"]
+                )[:, :2]
             st.write("Superlinked embedding PCA transformation ready.")
 
         if st.session_state["superlinked_pca"] is not None:
