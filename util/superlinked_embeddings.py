@@ -31,7 +31,9 @@ def create_superlinked_embeddings(dataset: pd.DataFrame, config: DictConfig):
     class Employee_skeleteon:
         id: IdField
 
-    numeric_columns, string_columns = separate_numeric_and_string_columns(dataset.drop(config.data.target_colname, axis=1))
+    numeric_columns, string_columns = separate_numeric_and_string_columns(
+        dataset.drop(config.data.target_colname, axis=1)
+    )
     for col in numeric_columns:
         Employee_skeleteon.__annotations__[camel_to_snake(col)] = Integer
     for col in string_columns:

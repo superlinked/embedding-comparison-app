@@ -23,7 +23,12 @@ def create_pca_component_scatter(
             x="Component 1",
             y="Component 2",
             color=color_by,
-            tooltip=["Component 1", "Component 2", config.data.target_colname, color_by],
+            tooltip=[
+                "Component 1",
+                "Component 2",
+                config.data.target_colname,
+                color_by,
+            ],
         )
         .properties(width=config.chart.width, height=config.chart.height)
     )

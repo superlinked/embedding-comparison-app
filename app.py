@@ -97,7 +97,9 @@ def main(config: DictConfig) -> None:
             with embedding_column_2:
                 st.markdown("## Create Superlinked embeddings")
                 if st.session_state["superlinked_embeddings"] is None:
-                    st.session_state["superlinked_embeddings"] = create_superlinked_embeddings(
+                    st.session_state[
+                        "superlinked_embeddings"
+                    ] = create_superlinked_embeddings(
                         st.session_state["df_to_use"], config=config
                     )
                 if st.session_state["superlinked_embeddings"] is not None:
@@ -118,21 +120,29 @@ def main(config: DictConfig) -> None:
             st.write("Superlinked embedding PCA transformation ready.")
 
         if st.session_state["superlinked_pca"] is not None:
-            st.session_state["coloring_attribute"] = st.selectbox("Color by", st.session_state["df_to_use"].columns)
+            st.session_state["coloring_attribute"] = st.selectbox(
+                "Color by", st.session_state["df_to_use"].columns
+            )
             if st.session_state["coloring_attribute"] is not None:
                 if st.button("Create scatter plots!"):
                     column_1, column_2 = st.columns(2)
                     with column_1:
                         st.header("LLM embeddings")
                         naive_chart = create_pca_component_scatter(
-                            st.session_state["df_to_use"], st.session_state["naive_pca"], st.session_state["coloring_attribute"], config
+                            st.session_state["df_to_use"],
+                            st.session_state["naive_pca"],
+                            st.session_state["coloring_attribute"],
+                            config,
                         )
                         st.altair_chart(naive_chart)
 
                     with column_2:
                         st.header("Superlinked embeddings")
                         superlinked_chart = create_pca_component_scatter(
-                            st.session_state["df_to_use"], st.session_state["superlinked_pca"], st.session_state["coloring_attribute"], config
+                            st.session_state["df_to_use"],
+                            st.session_state["superlinked_pca"],
+                            st.session_state["coloring_attribute"],
+                            config,
                         )
                         st.altair_chart(superlinked_chart)
 
