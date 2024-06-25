@@ -1,5 +1,5 @@
 embedding_model:
-  model_name: "mixedbread-ai/mxbai-embed-large-v1"
+  model_name: "Snowflake/snowflake-arctic-embed-l"
 data:
   target_colname: "Attrition"
 chart:
