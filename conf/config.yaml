@@ -1,0 +1,7 @@
+embedding_model:
+  model_name: "mixedbread-ai/mxbai-embed-large-v1"
+data:
+  target_colname: "Attrition"
+chart:
+  width: 600
+  height: 600
