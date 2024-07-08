@@ -6,7 +6,8 @@ import streamlit as st
 from omegaconf import OmegaConf, DictConfig
 
 from util.naive_embeddings import create_naive_embeddings
-from util.pca import pca_transform, create_pca_component_scatter
+from util.pca import pca_transform
+from util.visualisation import create_altair_2d_scatter
 from util.superlinked_embeddings import create_superlinked_embeddings
 
 
@@ -110,13 +111,13 @@ def main(config: DictConfig) -> None:
             st.markdown("# Visualisation")
             if st.session_state["naive_pca"] is None:
                 st.session_state["naive_pca"]: np.ndarray = pca_transform(
-                    st.session_state["naive_embeddings"]
-                )[:, :2]
+                    st.session_state["naive_embeddings"], 2
+                )
             st.write("LLM embedding PCA transformation ready.")
             if st.session_state["superlinked_pca"] is None:
                 st.session_state["superlinked_pca"]: np.ndarray = pca_transform(
-                    st.session_state["superlinked_embeddings"]
-                )[:, :2]
+                    st.session_state["superlinked_embeddings"], 2
+                )
             st.write("Superlinked embedding PCA transformation ready.")
 
         if st.session_state["superlinked_pca"] is not None:
@@ -128,7 +129,7 @@ def main(config: DictConfig) -> None:
                     column_1, column_2 = st.columns(2)
                     with column_1:
                         st.header("LLM embeddings")
-                        naive_chart = create_pca_component_scatter(
+                        naive_chart = create_altair_2d_scatter(
                             st.session_state["df_to_use"],
                             st.session_state["naive_pca"],
                             st.session_state["coloring_attribute"],
@@ -138,7 +139,7 @@ def main(config: DictConfig) -> None:
 
                     with column_2:
                         st.header("Superlinked embeddings")
-                        superlinked_chart = create_pca_component_scatter(
+                        superlinked_chart = create_altair_2d_scatter(
                             st.session_state["df_to_use"],
                             st.session_state["superlinked_pca"],
                             st.session_state["coloring_attribute"],
