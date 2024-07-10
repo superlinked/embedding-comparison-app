@@ -11,10 +11,6 @@ from util.visualisation import create_altair_2d_scatter, create_plotly_3d_scatte
 from util.superlinked_embeddings import create_superlinked_embeddings
 
 
-def update_df_to_use(config):
-    pass
-
-
 def main(config: DictConfig) -> None:
     st.set_page_config(layout="wide")
 
@@ -75,18 +71,19 @@ def main(config: DictConfig) -> None:
             ],
         )
         if st.button("Use selected columns!"):
-            st.session_state["df_to_use"] = st.session_state["df"].drop(
-                [
-                    f
-                    for f in st.session_state["df"].columns
-                    if f not in cols_to_use + [config.data.target_colname]
-                ],
-                axis=1,
-            )
-            st.session_state["naive_embeddings"] = None
-            st.session_state["superlinked_embeddings"] = None
-            st.session_state["naive_pca"] = None
-            st.session_state["superlinked_pca"] = None
+            if cols_to_use:
+                st.session_state["df_to_use"] = st.session_state["df"].drop(
+                    [
+                        f
+                        for f in st.session_state["df"].columns
+                        if f not in cols_to_use + [config.data.target_colname]
+                    ],
+                    axis=1,
+                )
+                st.session_state["naive_embeddings"] = None
+                st.session_state["superlinked_embeddings"] = None
+                st.session_state["naive_pca"] = None
+                st.session_state["superlinked_pca"] = None
 
     if st.session_state["df_to_use"] is not None:
         st.markdown("# Create vectors", unsafe_allow_html=True)
